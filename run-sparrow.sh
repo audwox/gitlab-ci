@@ -16,4 +16,12 @@ if [ "$risk1" -gt "$SP_R1" -o "$risk2" -gt "$SP_R2" ]; then
 	echo "Error: Too many risks."
 	exit 2
 fi
+[ "$rc" -ne 0 ] && {
+	echo "Error: sparrow return $rc."
+	exit 1
+}
+[ "$risk1" -gt "$SP_R1" -o "$risk2" -gt "$SP_R2" ] && {
+	echo "Error: Too many risks."
+	exit 2
+}
 exit 0
