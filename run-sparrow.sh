@@ -8,12 +8,12 @@ echo 1111
 risk2=`grep -P '2 \S+ \d+' <result | awk '{s+=$3} END {print s}'`
 echo 2222
 cat result
-[ "$rc" -ne 0 ] && {
+if [ "$rc" -ne 0 ]; then
 	echo "Error: sparrow return $rc."
 	exit 1
-}
-[ "$risk1" -gt "$SP_R1" -o "$risk2" -gt "$SP_R2" ] && {
+fi
+if [ "$risk1" -gt "$SP_R1" -o "$risk2" -gt "$SP_R2" ]; then
 	echo "Error: Too many risks."
 	exit 2
-}
+fi
 exit 0
