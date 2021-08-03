@@ -9,19 +9,12 @@ risk2=`grep -P '2 \S+ \d+' <result | awk '{s+=$3} END {print s}'`
 echo 2222
 echo $SP_R1 == $SP_R2
 cat result
-if [ "$rc" -ne 0 ]; then
-	echo "Error: sparrow return $rc."
-	exit 1
-fi
-if [ "$risk1" -gt "$SP_R1" || "$risk2" -gt "$SP_R2" ]; then
-	echo "Error: Too many risks."
-	exit 2
-fi
-[ "$rc" -ne 0 ] && {
+
+[ "0$rc" -ne 0 ] && {
 	echo "Error: sparrow return $rc."
 	exit 1
 }
-[ "$risk1" -gt "$SP_R1" || "$risk2" -gt "$SP_R2" ] && {
+[ "0$risk1" -gt "0$SP_R1" -o "0$risk2" -gt "0$SP_R2" ] && {
 	echo "Error: Too many risks."
 	exit 2
 }
