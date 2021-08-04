@@ -1,3 +1,5 @@
+#!/bin/sh
+
 # sparrow-client.sh 의 출력에서 risk 단계가 1, 2인 이슈(고위험 이슈)의 수를 비교하고
 # 고위험 이슈가 많으면 실행 종료 시 exit code로 2를 리턴.
 # exit codes:
