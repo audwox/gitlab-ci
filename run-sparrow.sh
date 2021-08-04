@@ -5,7 +5,7 @@
 # 1 - something wrong
 # 2 - too many issues
 
-/sparrow5_client/sparrow-client.sh -P JUST -U "$SP_ID" -PW ./pass.txt -S $SP_HOST -SD $BASE_DIR > result
+/sparrow5_client/sparrow-client.sh -P JUST -U "$SP_ID" -PW ./pass.txt -S $SP_HOST -SD $BASEDIR > result
 rc=$?
 risk1=`grep -P '1\s+\S+\s+\d+' result | awk '{s+=$3} END {print s}'`
 risk2=`grep -P '2\s+\S+\s+\d+' result | awk '{s+=$3} END {print s}'`
