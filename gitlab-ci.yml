@@ -1,0 +1,74 @@
+# variables:
+#  BASEDIR - 프로젝트 기준 폴더 (ex. /MEM)
+#  SP_ID - sparrow id
+#  SP_PW - sparrow password
+#  SP_KEY - sparrow project key
+#  SP_R1 - 매우위험 레벨의 이슈 체크 카운트 (ex. 0) 
+#  SP_R2 - 위험 레벨의 이슈 체크 카운트 (ex. 0)
+#  SP_CLIENT_URL - sparrow_client.zip 의 위치(url)
+
+cache: &global_cache
+    key: $CI_COMMIT_REF_SLUG
+    paths:
+        - vendor/
+    policy: pull-push
+
+before_script:
+    # 프로젝트가 특정 경로를 요구할 경우 디렉터리를 옮기기 위한 스크립트
+    - mkdir $BASEDIR
+    - mv `pwd`/* `pwd`/.git $BASEDIR
+    - cd $BASEDIR
+
+    # pre install
+    - yum install zip unzip -y
+
+stages:
+    - test
+
+test:unit-test:
+    # stages:에 명시한 stage 중 하나를 기입
+    stage: test
+    # 사용할 docker image
+    image: centos:7
+    # gitlab-runner register 수행 중 지정한 tag와 매치되는 tag 기입
+    tags:
+        - dev
+    cache:
+        <<: *global_cache
+    # 실행할 스크립트
+    script:
+        # install php 7.3.x
+        - yum install epel-release yum-utils -y
+        - yum install https://rpms.remirepo.net/enterprise/remi-release-7.rpm -y
+        - yum-config-manager --enable remi-php73
+        - yum install php php-common php-opcache php-mcrypt php-cli php-gd php-curl php-mysqlnd -y
+        - yum install openssl php-openssl php-posix -y
+
+        # prepare install composer
+        - yum install php-dom php-mbstring -y
+        - yum install zip unzip -y
+        - curl -sS https://getcomposer.org/installer | php
+        - php composer.phar require --dev phpunit/phpunit ^9.3
+
+        # do unit test
+        - php vendor/bin/phpunit test --colors=always
+
+test:sparrow:
+    # stages:에 명시한 stage 중 하나를 기입
+    stage: test
+    # 사용할 docker image
+    image: centos:7
+    # gitlab-runner register 수행 중 지정한 tag와 매치되는 tag 기입
+    tags:
+        - dev
+    # 실행할 스크립트
+    script:
+        # sparrow download & install
+        - curl $SP_CLIENT_URL -o /sparrow_client.zip
+        - unzip -qo /sparrow_client.zip -d /
+        - /sparrow5_client/setup.sh
+
+        # run sparrow-client
+        - echo -n "$SP_PW" > pass.txt
+        # - export SP_HOST SP_ID SP_KEY SP_R1 SP_R2
+        - curl https://raw.githubusercontent.com/audwox/gitlab-ci/main/run-sparrow.sh | bash
