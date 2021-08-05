@@ -70,5 +70,4 @@ test:sparrow:
 
         # run sparrow-client
         - echo -n "$SP_PW" > pass.txt
-        # - export SP_HOST SP_ID SP_KEY SP_R1 SP_R2
         - curl https://raw.githubusercontent.com/audwox/gitlab-ci/main/run-sparrow.sh | bash
