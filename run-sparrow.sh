@@ -18,7 +18,7 @@ cat result
 	exit 1
 }
 [ "0$risk1" -gt "0$SP_R1" -o "0$risk2" -gt "0$SP_R2" ] && {
-	echo "Error: Too many high risk issues: $(($risk1 + $risk2))"
+	echo "Error: Too many high risk issues: $((risk1 + risk2))"
 	exit 2
 }
 exit 0
