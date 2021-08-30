@@ -9,8 +9,8 @@
 
 /sparrow5_client/sparrow-client.sh -P "$SP_KEY" -U "$SP_ID" -PW ./pass.txt -S "$SP_HOST" -SD "$BASEDIR" > result
 rc=$?
-risk1=`grep -P '1\s+\S+\s+\d+' result | awk '{s+=$3} END {print s}'`
-risk2=`grep -P '2\s+\S+\s+\d+' result | awk '{s+=$3} END {print s}'`
+risk1=`grep -P '^ +1\ +\S+\ +\d+' result  | awk '{s+=$3} END {print s}'`
+risk2=`grep -P '^ +2\ +\S+\ +\d+' result  | awk '{s+=$3} END {print s}'`
 cat result
 
 [ "0$rc" -ne 0 ] && {
